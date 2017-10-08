@@ -7,8 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "GADBannerView.h"
+#import <AVFoundation/AVFoundation.h>
+#import <GoogleMobileAds/GoogleMobileAds.h>
 
 @interface FFFSoundBoardViewController : UIViewController  <GADBannerViewDelegate>
+
+@property (nonatomic, strong) AVAudioPlayer *player;
 
 @end

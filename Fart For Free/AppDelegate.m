@@ -7,13 +7,16 @@
 //
 
 #import "AppDelegate.h"
-#import "IAPStoreManager.h"
+#import <GoogleMobileAds/GoogleMobileAds.h>
+
 
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    [[IAPStoreManager sharedInstance] autoUpdate];
+	[GADMobileAds configureWithApplicationID:@"ca-app-pub-3677742875636291/8598865284"];
+	[[GADRewardBasedVideoAd sharedInstance] loadRequest:[GADRequest request]
+										   withAdUnitID:@"ca-app-pub-3677742875636291/8790125677"];
     return YES;
 }
 							

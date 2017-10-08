@@ -188,7 +188,7 @@ const NSString* kEventRestoreEnded = @"RestoreEnded";
 }
 
 - (BOOL)isLoading {
-    return [self.stateMachine isInState:kStateLoading];
+    return [self.stateMachine isInState:kStateLoading];void)purchase
 }
 
 - (BOOL)isReadyForSale {

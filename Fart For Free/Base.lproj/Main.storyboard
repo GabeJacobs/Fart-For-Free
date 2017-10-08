@@ -1,10 +1,15 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="4514" systemVersion="13B42" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="d0R-wU-vYi">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13196" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES" initialViewController="d0R-wU-vYi">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3747"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13173"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Sound Board View Controller - Soundboard-->
+        <!--Soundboard-->
         <scene sceneID="xuM-3t-Im0">
             <objects>
                 <viewController id="pce-hD-Ryg" customClass="FFFSoundBoardViewController" sceneMemberID="viewController">
@@ -13,9 +18,9 @@
                         <viewControllerLayoutGuide type="bottom" id="7wm-Ox-CtV"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="UxP-zh-oUs">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </view>
                     <tabBarItem key="tabBarItem" title="Soundboard" image="Cloud" id="Lb4-yh-0OU"/>
                 </viewController>
@@ -27,23 +32,24 @@
         <scene sceneID="EaR-Fa-d4z">
             <objects>
                 <tabBarController definesPresentationContext="YES" id="d0R-wU-vYi" customClass="FFFTabBarViewController" sceneMemberID="viewController">
-                    <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
+                    <nil key="simulatedBottomBarMetrics"/>
                     <tabBar key="tabBar" contentMode="scaleToFill" backgroundImage="TabBar" id="ReK-oH-WPi">
                         <rect key="frame" x="129" y="330" width="163" height="49"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                        <color key="tintColor" red="0.9647059440612793" green="0.9647059440612793" blue="0.98823535442352295" alpha="1" colorSpace="deviceRGB"/>
+                        <color key="tintColor" red="0.95558500289916992" green="0.95459771156311035" blue="0.98505628108978271" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </tabBar>
                     <connections>
                         <segue destination="pce-hD-Ryg" kind="relationship" relationship="viewControllers" id="fJR-ye-QKU"/>
                         <segue destination="uuQ-LF-Fvt" kind="relationship" relationship="viewControllers" id="DBy-lU-qEg"/>
                         <segue destination="t2H-nY-B50" kind="relationship" relationship="viewControllers" id="j6O-C2-kyo"/>
+                        <segue destination="Q68-IQ-Fro" kind="relationship" relationship="viewControllers" id="26g-b4-KqU"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dgf-V9-cnu" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="57" y="356"/>
         </scene>
-        <!--Timer View Controller - Timer-->
+        <!--Countdown-->
         <scene sceneID="ybt-kc-lxq">
             <objects>
                 <viewController id="uuQ-LF-Fvt" customClass="FFFTimerViewController" sceneMemberID="viewController">
@@ -52,17 +58,17 @@
                         <viewControllerLayoutGuide type="bottom" id="w13-sR-upU"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="exR-8p-NYH">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Timer" image="Speedometer" id="06b-0T-pHL"/>
+                    <tabBarItem key="tabBarItem" title="Countdown" image="Speedometer" id="06b-0T-pHL"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="qjA-41-Cj0" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="591" y="682"/>
         </scene>
-        <!--Recorder View Controller - Record-->
+        <!--Social-->
         <scene sceneID="gbD-4I-5f5">
             <objects>
                 <viewController id="t2H-nY-B50" customClass="FFFRecorderViewController" sceneMemberID="viewController">
@@ -71,26 +77,41 @@
                         <viewControllerLayoutGuide type="bottom" id="9F1-D5-qut"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="2hb-7O-L61">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Record" image="Mic" id="PzX-A8-olS"/>
+                    <tabBarItem key="tabBarItem" title="Social" image="Social" id="PzX-A8-olS"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="PbL-xf-Xtj" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="600" y="1355"/>
         </scene>
+        <!--Premium-->
+        <scene sceneID="iRB-0o-ps1">
+            <objects>
+                <viewController id="Q68-IQ-Fro" customClass="FFFUnlockedFartsViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="rQA-Dt-dU9"/>
+                        <viewControllerLayoutGuide type="bottom" id="sYF-Zk-MMM"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="2wB-Hg-fd7">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <tabBarItem key="tabBarItem" title="Premium" image="PremiumIcon" id="eq6-8v-st2"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="JEl-BH-JRq" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="571" y="2208"/>
+        </scene>
     </scenes>
     <resources>
         <image name="Cloud" width="30" height="25"/>
-        <image name="Mic" width="13" height="26"/>
+        <image name="PremiumIcon" width="21" height="20"/>
+        <image name="Social" width="21" height="26"/>
         <image name="Speedometer" width="25" height="25"/>
         <image name="TabBar" width="320" height="49"/>
     </resources>
-    <simulatedMetricsContainer key="defaultSimulatedMetrics">
-        <simulatedStatusBarMetrics key="statusBar"/>
-        <simulatedOrientationMetrics key="orientation"/>
-        <simulatedScreenMetrics key="destination" type="retina4"/>
-    </simulatedMetricsContainer>
 </document>

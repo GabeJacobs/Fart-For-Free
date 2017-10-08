@@ -8,8 +8,10 @@
 
 #import <UIKit/UIKit.h>
 #import <iAd/iAd.h>
-#import "GADBannerView.h"
+#import <GoogleMobileAds/GoogleMobileAds.h>
 
-@interface FFFTimerViewController : UIViewController <GADBannerViewDelegate>
+@interface FFFTimerViewController : UIViewController
 
+@property (nonatomic, strong) AVAudioPlayer *player;
+@property (nonatomic) UIBackgroundTaskIdentifier backgroundTaskIdentifier;
 @end

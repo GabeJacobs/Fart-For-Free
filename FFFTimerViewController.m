@@ -46,6 +46,10 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+
+	self.player = [[AVAudioPlayer alloc] init];
+
+	
     [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationNone];
 
     self.seconds = 10;
@@ -135,18 +139,18 @@
     [self.view addSubview:self.dontSleep];
     */
     
-    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
-    NSString *alreadyRun = @"already-run";
-    if (![prefs boolForKey:alreadyRun]){
-
-        [prefs setBool:YES forKey:alreadyRun];
-        UIAlertView *alert = [[UIAlertView alloc]
-                              initWithTitle:@"Don't lock!"
-                              message:@"Don't lock your iPhone after you hit start. Simply rest your phone face down behind someone, or under a pillow."
-                              delegate:nil cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
-        [alert show];
-    }
-    
+//    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+//    NSString *alreadyRun = @"already-run";
+//    if (![prefs boolForKey:alreadyRun]){
+//
+//        [prefs setBool:YES forKey:alreadyRun];
+//        UIAlertView *alert = [[UIAlertView alloc]
+//                              initWithTitle:@"Don't lock!"
+//                              message:@"Don't lock your iPhone after you hit start. Simply rest your phone face down behind someone, or under a pillow."
+//                              delegate:nil cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
+//        [alert show];
+//    }
+//    
 
 }
 
@@ -154,6 +158,12 @@
     
     if(self.seconds != 0){
 
+		self.backgroundTaskIdentifier =
+		[[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
+			
+			[[UIApplication sharedApplication] endBackgroundTask:self.backgroundTaskIdentifier];
+		}];
+		
         self.start.hidden = YES;
         self.stop.hidden = NO;
         self.timer = [NSTimer scheduledTimerWithTimeInterval:1.0f target:self selector:@selector(updateCounter) userInfo:nil repeats:YES];
@@ -180,17 +190,22 @@
     else if(self.seconds == 1){
         self.seconds--;
         self.timeLabel.text = [NSString stringWithFormat:@"%d s", self.seconds];
-        
-        SystemSoundID soundId;
+		
+//		NSURL *audioPath = [[NSBundle mainBundle] URLForResource:[NSString stringWithFormat:@"Fart%ld", (long)buttonClicked.tag] withExtension:@"mp3"];
+		
         NSURL *audioPath = [[NSBundle mainBundle] URLForResource:[NSString stringWithFormat:@"Intensity%d", self.intensity] withExtension:@"mp3"];
-        AudioServicesCreateSystemSoundID((CFURLRef)CFBridgingRetain(audioPath), &soundId);
-        AudioServicesPlaySystemSound (soundId);
-        
+//        AudioServicesCreateSystemSoundID((CFURLRef)CFBridgingRetain(audioPath), &soundId);
+//        AudioServicesPlaySystemSound (soundId);
+
+		
+		self.player = [[AVAudioPlayer alloc] initWithContentsOfURL:audioPath error:nil];
+		[self.player play];
         [self stopTimer];
     }
    
 
 }
+
 
 -(void)touchUp{
     if(self.seconds < 60){

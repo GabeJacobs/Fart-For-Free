@@ -7,10 +7,9 @@
 //
 
 #import "FFFRecorderViewController.h"
-#import "IAPStoreManager.h"
 
 
-@interface FFFRecorderViewController ()
+@interface FFFRecorderViewController () <UIPickerViewDelegate, UIPickerViewDataSource>
 
 @property (nonatomic,strong) UIImageView *background;
 @property (nonatomic,strong) GADBannerView *bannerView;
@@ -33,6 +32,7 @@
 @property (strong, nonatomic) NSMutableDictionary *namesToFiles;
 @property (strong, nonatomic) NSURL *currectSelectedFilePath;
 @property (strong, nonatomic) NSString *currectSelectedFartName;
+@property (strong, nonatomic) UIPickerView *picker;
 
 
 
@@ -54,366 +54,191 @@
     [super viewDidLoad];
     
     
-    self.recordEncoding = 1;
-    
-
-    self.numberOfSaves = [[NSUserDefaults standardUserDefaults] integerForKey:@"numberofsaves"];
-    if(self.numberOfSaves == 0){
-        self.numberOfSaves = 1;
-    }
-    self.somethingRecorded = NO;
-    [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationNone];
-    
-     self.savesArray = [NSMutableArray arrayWithArray:[[NSUserDefaults standardUserDefaults] objectForKey:@"saves"]];
-    if(self.savesArray == nil) {
-        self.savesArray = [[NSMutableArray alloc] init];
-    }
-    
-    self.namesToFiles = [[[NSUserDefaults standardUserDefaults] dictionaryForKey:@"dictionaryKey"] mutableCopy];
-    if(self.namesToFiles == nil) {
-        self.namesToFiles = [[NSMutableDictionary alloc] init];
-    }
-
-
-    self.background = [[UIImageView alloc] initWithFrame:CGRectMake(-1, -1, [[UIScreen mainScreen] bounds].size.width+2, ([[UIScreen mainScreen] bounds].size.height+2))];
+	
+	self.background = [[UIImageView alloc] initWithFrame:self.view.frame];
     [self.background setImage:[UIImage imageNamed:@"Background.png"]];
     [self.view addSubview:self.background];
     
-    self.bannerView = [[GADBannerView alloc] initWithAdSize:kGADAdSizeBanner];
-    self.bannerView.adUnitID = @"ca-app-pub-3677742875636291/8598865284";
-    self.bannerView.rootViewController = self;
-    [self.bannerView setDelegate:self];
-    self.bannerView.alpha = 0.0;
-    //[self.view addSubview:self.bannerView];
-    [self.bannerView loadRequest:[GADRequest request]];
-    
-    self.recordButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self.recordButton setImage:[UIImage imageNamed:@"Record.png"] forState:UIControlStateNormal];
-    self.recordButton.frame = CGRectMake(55, 80, self.recordButton.imageView.image.size.width, self.recordButton.imageView.image.size.height);
-    [self.recordButton addTarget:self action:@selector(recordAudio:) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:self.recordButton];
-    
-    self.playButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self.playButton setImage:[UIImage imageNamed:@"Play.png"] forState:UIControlStateNormal];
-    self.playButton.frame = CGRectMake((self.view.frame.size.width/2 - self.playButton.imageView.image.size.width/2), 80, self.playButton.imageView.image.size.width, self.playButton.imageView.image.size.height);
-    [self.playButton addTarget:self action:@selector(playAudio:) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:self.playButton];
-    
-    self.stopButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self.stopButton setImage:[UIImage imageNamed:@"StopRecording.png"] forState:UIControlStateNormal];
-    self.stopButton.frame = CGRectMake(55, 80, self.stopButton.imageView.image.size.width, self.stopButton.imageView.image.size.height);
-    [self.stopButton addTarget:self action:@selector(stopAudio:) forControlEvents:UIControlEventTouchUpInside];
-    self.stopButton.hidden = YES;
-    [self.view addSubview:self.stopButton];
-    
-    self.saveButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self.saveButton setImage:[UIImage imageNamed:@"Save.png"] forState:UIControlStateNormal];
-    self.saveButton.frame = CGRectMake(209, 80, self.saveButton.imageView.image.size.width, self.saveButton.imageView.image.size.height);
-    [self.saveButton addTarget:self action:@selector(saveAudioAlert) forControlEvents:UIControlEventTouchUpInside];
-    self.saveButton.enabled = NO;
-    [self.view addSubview:self.saveButton];
-    
-    NSLog(@"%f",(self.view.frame.size.width/2 - self.playButton.imageView.image.size.width/2));
-    
-    
-    self.fartsTable = [[UITableView alloc] initWithFrame:CGRectMake(0, 170, 320, 176)];
-    self.fartsTable.dataSource = self;
-    self.fartsTable.delegate = self;
-    self.fartsTable.backgroundColor = [UIColor colorWithRed:24.0/255.0 green:24.0/255.0 blue:24.0/255.0 alpha:.5];
-    [self.fartsTable setSeparatorInset:UIEdgeInsetsZero];
+	self.bannerView = [[GADBannerView alloc] initWithAdSize:kGADAdSizeBanner];
+	self.bannerView.adUnitID = @"ca-app-pub-3677742875636291/8598865284";
+	self.bannerView.rootViewController = self;
+	[self.bannerView setDelegate:self];
+	self.bannerView.alpha = 0.0;
+	[self.view addSubview:self.bannerView];
+	[self.bannerView loadRequest:[GADRequest request]];
+	
+	self.picker = [UIPickerView new];
+	self.picker.frame = CGRectMake(0, self.bannerView.frame.size.height, self.view.frame.size.width, self.picker.frame.size.height + 60);
+	self.picker.delegate = self;
+	self.picker.dataSource = self;
+	self.picker.showsSelectionIndicator = YES;
+	[self.picker selectRow:4 inComponent:0 animated:NO];
+	[self.view addSubview:self.picker];
 
-    [self.view addSubview:self.fartsTable];
-
-    
-    if([[AVAudioSession sharedInstance] respondsToSelector:@selector(requestRecordPermission:)]) {
-        [[AVAudioSession sharedInstance] requestRecordPermission:^(BOOL granted) {
-            if (!granted) {
-                NSLog(@"User will not be able to use the microphone!");
-            }
-        }];
-    }
-
-    self.mailButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self.mailButton setImage:[UIImage imageNamed:@"Mail.png"] forState:UIControlStateNormal];
-    self.mailButton.frame = CGRectMake(0, 0, self.mailButton.imageView.image.size.width, self.mailButton.imageView.image.size.height);
-    self.mailButton.center = CGPointMake(self.view.center.x+40, 400);
-    [self.mailButton addTarget:self action:@selector(composeMail) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:self.mailButton];
-    
-    self.messageButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self.messageButton setImage:[UIImage imageNamed:@"Message.png"] forState:UIControlStateNormal];
-    self.messageButton.frame = CGRectMake(0, 0, self.messageButton.imageView.image.size.width, self.messageButton.imageView.image.size.height);
-    self.messageButton.center = CGPointMake(self.view.center.x-40, 400);
-    [self.messageButton addTarget:self action:@selector(composeMessage) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:self.messageButton];
-    
+	self.messageButton = [UIButton buttonWithType:UIButtonTypeCustom];
+	[self.messageButton setImage:[UIImage imageNamed:@"SendMessage"] forState:UIControlStateNormal];
+	self.messageButton.frame = CGRectMake(30, self.picker.frame.size.height + self.picker.frame.origin.y + 10, self.view.frame.size.width - 60, 110);
+	CGSize screen = [[UIScreen mainScreen] bounds].size;
+	if(screen.height <=480) {
+		self.messageButton.frame = CGRectMake(30, self.picker.frame.size.height + self.picker.frame.origin.y - 20, self.view.frame.size.width - 60, 110);
+	}
+	[self.messageButton addTarget:self action:@selector(composeMessage) forControlEvents:UIControlEventTouchUpInside];
+	[self.view addSubview:self.messageButton];
 
 }
 
-- (void)adViewDidReceiveAd:(GADBannerView *)bannerView {
-    [UIView beginAnimations:@"Bannerfade" context:nil];
-    bannerView.alpha = 1.0;
-    [UIView setAnimationDuration:.7];
-    [UIView commitAnimations];
+- (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView {
+	return 1;
 }
 
-- (void)adView:(GADBannerView *)bannerView
-didFailToReceiveAdWithError:(GADRequestError *)error {
-    [UIView beginAnimations:@"Bannerfade" context:nil];
-    [UIView setAnimationDuration:.7];
-    bannerView.alpha = 0.0;
-    [UIView commitAnimations];
+- (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component {
+	return 20;
 }
 
-- (void)recordAudio:(id)sender {
-    
-    IAPProduct* product = [[IAPStoreManager sharedInstance] productForIdentifier:@"FartRecordingAbility"];
-    [product purchase];
-    
-    if(self.purchased){
-        
-        self.somethingRecorded = YES;
-        self.saveButton.enabled = NO;
-        
-        NSLog(@"startRecording");
-        self.recordButton.hidden = YES;
-        self.stopButton.hidden = NO;
-        
-        // Init audio with record capability
-        AVAudioSession *audioSession = [AVAudioSession sharedInstance];
-        [audioSession setCategory:AVAudioSessionCategoryRecord error:nil];
-        
-        NSMutableDictionary *recordSettings = [[NSMutableDictionary alloc] initWithCapacity:10];
-        if(self.recordEncoding == 6)
-        {
-            [recordSettings setObject:[NSNumber numberWithInt: kAudioFormatLinearPCM] forKey: AVFormatIDKey];
-            [recordSettings setObject:[NSNumber numberWithFloat:44100.0] forKey: AVSampleRateKey];
-            [recordSettings setObject:[NSNumber numberWithInt:2] forKey:AVNumberOfChannelsKey];
-            [recordSettings setObject:[NSNumber numberWithInt:16] forKey:AVLinearPCMBitDepthKey];
-            [recordSettings setObject:[NSNumber numberWithBool:NO] forKey:AVLinearPCMIsBigEndianKey];
-            [recordSettings setObject:[NSNumber numberWithBool:NO] forKey:AVLinearPCMIsFloatKey];
-        }
-        else
-        {
-            NSNumber *formatObject;
-            
-            switch (self.recordEncoding) {
-                case (1):
-                    formatObject = [NSNumber numberWithInt: kAudioFormatMPEG4AAC];
-                    break;
-                case (2):
-                    formatObject = [NSNumber numberWithInt: kAudioFormatAppleLossless];
-                    break;
-                case (3):
-                    formatObject = [NSNumber numberWithInt: kAudioFormatAppleIMA4];
-                    break;
-                case (4):
-                    formatObject = [NSNumber numberWithInt: kAudioFormatiLBC];
-                    break;
-                case (5):
-                    formatObject = [NSNumber numberWithInt: kAudioFormatULaw];
-                    break;
-                default:
-                    formatObject = [NSNumber numberWithInt: kAudioFormatAppleIMA4];
-            }
-            
-            [recordSettings setObject:formatObject forKey: AVFormatIDKey];
-            [recordSettings setObject:[NSNumber numberWithFloat:44100.0] forKey: AVSampleRateKey];
-            [recordSettings setObject:[NSNumber numberWithInt:2] forKey:AVNumberOfChannelsKey];
-            [recordSettings setObject:[NSNumber numberWithInt:12800] forKey:AVEncoderBitRateKey];
-            [recordSettings setObject:[NSNumber numberWithInt:16] forKey:AVLinearPCMBitDepthKey];
-            [recordSettings setObject:[NSNumber numberWithInt: AVAudioQualityHigh] forKey: AVEncoderAudioQualityKey];
-        }
-        NSURL *url = [NSURL fileURLWithPath:[NSString stringWithFormat:@"%@/fart%d.caf", [[NSBundle mainBundle] resourcePath], self.numberOfSaves]];
-        
-        NSError *error = nil;
-        self.audioRecorder = [[ AVAudioRecorder alloc] initWithURL:url settings:recordSettings error:&error];
-        
-        if ([self.audioRecorder prepareToRecord] == YES){
-            [self.audioRecorder record];
-        }else {
-            int errorCode = CFSwapInt32HostToBig ([error code]);
-            NSLog(@"Error: %@ [%4.4s])" , [error localizedDescription], (char*)&errorCode);
-            
-        }
-        NSLog(@"recording");
-        
-    }
-    else{
-        //[self buyProduct];
-    }
-    
-}
-
-- (void)playAudio:(id)sender {
-    
-    if(self.somethingRecorded){
-        NSLog(@"playRecording");
-        // Init audio with playback capability
-        AVAudioSession *audioSession = [AVAudioSession sharedInstance];
-        [audioSession setCategory:AVAudioSessionCategoryPlayback error:nil];
-        NSURL *url;
-        if(self.somethingRecorded){
-          url = [NSURL fileURLWithPath:[NSString stringWithFormat:@"%@/fart%d.caf", [[NSBundle mainBundle] resourcePath], self.numberOfSaves]];
-        }
-        else{
-            url = [NSURL fileURLWithPath:[NSString stringWithFormat:@"%@/fart%d.caf", [[NSBundle mainBundle] resourcePath], self.numberOfSaves-1]];
-
-        }
-        NSLog(@"%@",url);
-
-        NSError *error;
-        self.audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:url error:&error];
-        self.audioPlayer.numberOfLoops = 0;
-        [self.audioPlayer play];
-        NSLog(@"playing");
-    }
-}
-
-- (void)stopAudio:(id)sender {
-    self.saveButton.enabled = YES;
-    NSLog(@"stopRecording");
-    [self.audioRecorder stop];
-    self.recordButton.hidden = NO;
-    self.stopButton.hidden = YES;
-    NSLog(@"stopped");
-}
-
-- (void)saveAudioAlert {
-    
-    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Name the fart" message:@"Enter the fart name:" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Save", nil];
-    alertView.alertViewStyle = UIAlertViewStylePlainTextInput;
-    alertView.tag = 1;
-    [alertView show];
-}
-
-
-- (void)saveAudio:(NSString*)name {
-    
-
-    [self.namesToFiles setValue:[NSString stringWithFormat:@"fart%d.caf", self.numberOfSaves] forKey:name];
-    
-    self.somethingRecorded = NO;
-    [self.savesArray addObject:[NSString stringWithString:name]];
-    [self.fartsTable reloadData];
-    self.numberOfSaves++;
-    self.saveButton.enabled = NO;
-    
-    NSIndexPath* ipath = [NSIndexPath indexPathForRow: [self.savesArray count]-1 inSection: 0];
-    [self.fartsTable scrollToRowAtIndexPath: ipath atScrollPosition: UITableViewScrollPositionTop animated: YES];
-    
-    
-    [[NSUserDefaults standardUserDefaults] setObject:self.savesArray forKey:@"saves"];
-    [[NSUserDefaults standardUserDefaults] setInteger:self.numberOfSaves forKey:@"numberofsaves"];
-    [[NSUserDefaults standardUserDefaults] setObject:self.namesToFiles forKey:@"dictionaryKey"];
-
-
-}
-
--(void)audioPlayerDidFinishPlaying:
-(AVAudioPlayer *)player successfully:(BOOL)flag
-{
-    //self.recordButton.enabled = YES;
-    //self.stopButton.enabled = NO;
-}
-
--(void)audioRecorderDidFinishRecording:successfully{
-    //self.saveButton.enabled = YES;
-}
-
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
--(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return [self.savesArray count];
-}
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
-    return 1;
-}
-
-
--(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-    static NSString *cellIdentifier = @"SettingsCell";
-    
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-
-    if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"MyIdentifier"];
-    }
-    
-    NSString *fart = [self.savesArray objectAtIndex:indexPath.row];
-    
-    [cell.textLabel setText:fart];
-    cell.backgroundColor = [UIColor clearColor];
-    cell.textLabel.textColor = [UIColor whiteColor];
-    cell.selectionStyle = UITableViewCellSelectionStyleBlue;
-
-    
-    return cell;
-}
-
--(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-    NSString *fartName = cell.textLabel.text;
-    NSString *fileName =  [self.namesToFiles valueForKey:cell.textLabel.text];
-    
-    AVAudioSession *audioSession = [AVAudioSession sharedInstance];
-    [audioSession setCategory:AVAudioSessionCategoryPlayback error:nil];
-    
-    NSURL *url = [NSURL fileURLWithPath:[NSString stringWithFormat:@"%@/%@", [[NSBundle mainBundle] resourcePath], fileName]];
-    self.currectSelectedFilePath = url;
-    self.currectSelectedFartName = fartName;
-    
-    NSError *error;
-    self.audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:url error:&error];
-    self.audioPlayer.numberOfLoops = 0;
-    [self.audioPlayer play];
-    
-    NSLog(@"%@",url);
-
-    
-}
-
-
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-    [self.savesArray removeObjectAtIndex:indexPath.row];
-    NSLog(@"%ld",(long)indexPath.row);
-    
-    [self.fartsTable beginUpdates];
-
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    }
-    [self.fartsTable endUpdates];
-    [self.fartsTable reloadData];
-    
-    [[NSUserDefaults standardUserDefaults] setObject:self.savesArray forKey:@"saves"];
-
-
-
+- (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component {
+	NSString * title = nil;
+	switch(row) {
+		case 0:
+			title = @"Fart 1: Lima Beans";
+			break;
+		case 1:
+			title = @"Fart 2: The Library";
+			break;
+		case 2:
+			title = @"Fart 3: Belly Flop";
+			break;
+		case 3:
+			title = @"Fart 4: The Not So Silent";
+			break;
+		case 4:
+			title = @"Fart 5: Echo Chamber";
+			break;
+		case 5:
+			title = @"Fart 6: Execution";
+			break;
+		case 6:
+			title = @"Fart 7: Taco Taco";
+			break;
+		case 7:
+			title = @"Fart 8: 1st Down";
+			break;
+		case 8:
+			title = @"Fart 9: The Exhale";
+			break;
+		case 9:
+			title = @"Fart 10: Raindrops";
+			break;
+		case 10:
+			title = @"Fart 11: 1st Grade";
+			break;
+		case 11:
+			title = @"Fart 12: Retro";
+			break;
+		case 12:
+			title = @"Fart 13: Just Made It";
+			break;
+		case 13:
+			title = @"Fart 14: Passive Aggressive";
+			break;
+		case 14:
+			title = @"Fart 15: Jab, Jab, Uppercut";
+			break;
+		case 15:
+			title = @"Fart 16: Lasagna";
+			break;
+		case 16:
+			title = @"Fart 17: Grandpa";
+			break;
+		case 17:
+			title = @"Fart 18: Whiskers";
+			break;
+		case 18:
+			title = @"Fart 19: The Call";
+			break;
+		case 19:
+			title = @"Fart 20: Hello, World";
+			break;
+	}
+	return title;
 }
 
 -(void)composeMessage{
     
-    
-    NSIndexPath *path = [self.fartsTable indexPathForSelectedRow];
-    if (path){
-        
+	
         if ([MFMessageComposeViewController canSendText]) {
             
             MFMessageComposeViewController *composeViewController = [[MFMessageComposeViewController alloc] initWithNibName:nil bundle:nil];
             [composeViewController setMessageComposeDelegate:self];
-            [composeViewController setBody:@"I just farted"];
-            NSString *path = [self.currectSelectedFilePath path];
-            NSData *data = [[NSFileManager defaultManager] contentsAtPath:path];
-            [composeViewController addAttachmentData:data typeIdentifier:@"com.apple.coreaudio-​format" filename:[NSString stringWithFormat:@"%@.caf",self.currectSelectedFartName]];
-            
+			[composeViewController setBody:@"I just farted. Fart back: https://itunes.apple.com/us/app/fart-for-free/id300897713?mt=8"];
+			NSURL *path = [[NSBundle mainBundle] URLForResource:[NSString stringWithFormat:@"Fart%d", self.selectedRow + 1] withExtension:@"mp3"];
+			NSData *data = [NSData dataWithContentsOfURL:path];
+			
+			NSString *title;
+			
+			switch(self.selectedRow) {
+				case 0:
+					title = @"Lima Beans";
+					break;
+				case 1:
+					title = @"The Library";
+					break;
+				case 2:
+					title = @"Belly Flop";
+					break;
+				case 3:
+					title = @"The Not So Silent";
+					break;
+				case 4:
+					title = @"Echo Chamber";
+					break;
+				case 5:
+					title = @"Execution";
+					break;
+				case 6:
+					title = @"Taco Taco";
+					break;
+				case 7:
+					title = @"1st Down";
+					break;
+				case 8:
+					title = @"The Exhale";
+					break;
+				case 9:
+					title = @"Raindrops";
+					break;
+				case 10:
+					title = @"1st Grade";
+					break;
+				case 11:
+					title = @"Retro";
+					break;
+				case 12:
+					title = @"Just Made It";
+					break;
+				case 13:
+					title = @"Passive Aggressive";
+					break;
+				case 14:
+					title = @"Jab, Jab, Uppercut";
+					break;
+				case 15:
+					title = @"Lasagna";
+					break;
+				case 16:
+					title = @"Grandpa";
+					break;
+				case 17:
+					title = @"Whiskers";
+					break;
+				case 18:
+					title = @"The Call";
+					break;
+				case 19:
+					title = @"Hello, World";
+					break;
+			}
+			[composeViewController addAttachmentData:data typeIdentifier:@"audio/mp3" filename:[NSString stringWithFormat:@"%@.mp3",title]];
+
             [self presentViewController:composeViewController animated:YES completion:nil];
             
         }
@@ -421,83 +246,32 @@ didFailToReceiveAdWithError:(GADRequestError *)error {
             UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Oops" message:@"Looks like you can't send messages :(" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
             [alertView show];
         }
-    }
-    else{
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Select a fart to share" message:@"Or save one if you haven't done that yet" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-        [alertView show];
-    }
-
-    
 }
 
-
--(void)composeMail{
-    
-    
-    NSIndexPath *path = [self.fartsTable indexPathForSelectedRow];
-    if (path){
-        
-        if ([MFMailComposeViewController canSendMail]) {
-            
-            MFMailComposeViewController *composeViewController = [[MFMailComposeViewController alloc] initWithNibName:nil bundle:nil];
-            [composeViewController setMailComposeDelegate:self];
-            [composeViewController setToRecipients:@[@""]];
-            [composeViewController setSubject:@"I just farted"];
-            [composeViewController setMessageBody:@"Recorded with <a href=\"https://itunes.apple.com/us/app/fart-for-free/id300897713?mt=8\">Fart For Free</a>" isHTML:YES];
-            NSString *path = [self.currectSelectedFilePath path];
-            NSData *data = [[NSFileManager defaultManager] contentsAtPath:path];
-            [composeViewController addAttachmentData:data mimeType:@"audio/caf" fileName:[NSString stringWithFormat:@"%@.caf",self.currectSelectedFartName]];
-            
-            [self presentViewController:composeViewController animated:YES completion:nil];
-            
-        }
-        else{
-            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Oops" message:@"Looks like you can't send mail :(" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-            [alertView show];
-        }
-    }
-    else{
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Select a fart to share" message:@"Or save one if you haven't done that yet" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-        [alertView show];
-    }
-
-    
-}
-
-- (void)mailComposeController:(MFMailComposeViewController*)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError*)error
-{
-    [self dismissViewControllerAnimated:YES completion:nil];
-}
 
 - (void)messageComposeViewController:(MFMessageComposeViewController *)controller didFinishWithResult:(MessageComposeResult)result{
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
-
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-    // u need to change 0 to other value(,1,2,3) if u have more buttons.then u can check which button was pressed.
-    if(alertView.tag == 1){
-        if (buttonIndex == 1) {
-            UITextField *textfield =  [alertView textFieldAtIndex: 0];
-            if([textfield.text  isEqual: @""]){
-                UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Blank name" message:@"Please enter a name" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-                alertView.tag = 2;
-                [alertView show];
-                
-
-            }
-            else{
-                [self saveAudio:textfield.text];
-                
-            }
-        }
-    }
-    if(alertView.tag == 2){
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Name the fart" message:@"Enter the fart name:" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Save", nil];
-        alertView.alertViewStyle = UIAlertViewStylePlainTextInput;
-        alertView.tag = 1;
-        [alertView show];
-    }
+- (void)pickerView:(UIPickerView *)thePickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component {
+	self.selectedRow = row;
 }
+
+
+- (void)adViewDidReceiveAd:(GADBannerView *)bannerView {
+	[UIView beginAnimations:@"Bannerfade" context:nil];
+	bannerView.alpha = 1.0;
+	[UIView setAnimationDuration:.7];
+	[UIView commitAnimations];
+}
+
+- (void)adView:(GADBannerView *)bannerView
+didFailToReceiveAdWithError:(GADRequestError *)error {
+	[UIView beginAnimations:@"Bannerfade" context:nil];
+	[UIView setAnimationDuration:.7];
+	bannerView.alpha = 0.0;
+	[UIView commitAnimations];
+}
+
 
 @end

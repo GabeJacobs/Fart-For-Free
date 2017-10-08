@@ -7,12 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "GADBannerView.h"
+#import <GoogleMobileAds/GoogleMobileAds.h>
 #import <AVFoundation/AVFoundation.h>
 #import <MessageUI/MessageUI.h>
 #import <StoreKit/StoreKit.h>
 
 
 @interface FFFRecorderViewController : UIViewController <GADBannerViewDelegate, AVAudioPlayerDelegate , UITableViewDataSource, UITableViewDelegate, UIAlertViewDelegate, MFMailComposeViewControllerDelegate, MFMessageComposeViewControllerDelegate,SKProductsRequestDelegate,SKPaymentTransactionObserver>
+
+@property (nonatomic) int selectedRow;
 
 @end
