@@ -64,6 +64,7 @@
     self.bannerView.rootViewController = self;
     [self.bannerView setDelegate:self];
     self.bannerView.alpha = 0.0;
+	self.bannerView.frame = CGRectMake(0, 0, self.view.frame.size.width, self.bannerView.frame.size.height);
     [self.view addSubview:self.bannerView];
     [self.bannerView loadRequest:[GADRequest request]];
     

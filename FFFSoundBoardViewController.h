@@ -10,6 +10,9 @@
 #import <AVFoundation/AVFoundation.h>
 #import <GoogleMobileAds/GoogleMobileAds.h>
 
+#define IDIOM    UI_USER_INTERFACE_IDIOM()
+#define IPAD     UIUserInterfaceIdiomPad
+
 @interface FFFSoundBoardViewController : UIViewController  <GADBannerViewDelegate>
 
 @property (nonatomic, strong) AVAudioPlayer *player;
