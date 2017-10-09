@@ -179,7 +179,9 @@
         self.forFree.frame = CGRectMake(self.forFree.frame.origin.x, self.forFree.frame.origin.y - 165 ,self.forFree.frame.size.width, self.forFree.frame.size.height);
 		
 		if (IDIOM == IPAD) {
-			self.fartLogo.frame = CGRectMake(self.fartLogo.frame.origin.x, self.fartLogo.frame.origin.y - 160,self.fartLogo.frame.size.width, self.fartLogo.frame.size.height);		}
+			self.fartLogo.frame = CGRectMake(self.fartLogo.frame.origin.x, self.fartLogo.frame.origin.y - 160,self.fartLogo.frame.size.width, self.fartLogo.frame.size.height);
+			
+		}
     }
 
     
@@ -586,7 +588,7 @@
      [self.view addSubview:self.button18];
     
     self.button19 = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self.button19 setImage:[UIImage imageNamed:@"Slice 19~ipad.png"] forState:UIControlStateNormal];
+    [self.button19 setImage:[UIImage imageNamed:@"Slice 19.png"] forState:UIControlStateNormal];
 	if (IDIOM == IPAD) {
 		[self.button19 setImage:[UIImage imageNamed:@"Slice 19ipad.png"] forState:UIControlStateNormal];
 	}

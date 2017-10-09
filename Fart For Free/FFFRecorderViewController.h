@@ -12,6 +12,8 @@
 #import <MessageUI/MessageUI.h>
 #import <StoreKit/StoreKit.h>
 
+#define IDIOM    UI_USER_INTERFACE_IDIOM()
+#define IPAD     UIUserInterfaceIdiomPad
 
 @interface FFFRecorderViewController : UIViewController <GADBannerViewDelegate, AVAudioPlayerDelegate , UITableViewDataSource, UITableViewDelegate, UIAlertViewDelegate, MFMailComposeViewControllerDelegate, MFMessageComposeViewControllerDelegate,SKProductsRequestDelegate,SKPaymentTransactionObserver>
 

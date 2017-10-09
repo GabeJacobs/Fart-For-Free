@@ -10,6 +10,10 @@
 #import <iAd/iAd.h>
 #import <GoogleMobileAds/GoogleMobileAds.h>
 
+#define IDIOM    UI_USER_INTERFACE_IDIOM()
+#define IPAD     UIUserInterfaceIdiomPad
+
+
 @interface FFFTimerViewController : UIViewController
 
 @property (nonatomic, strong) AVAudioPlayer *player;

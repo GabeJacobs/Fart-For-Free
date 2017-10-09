@@ -67,26 +67,7 @@
 	self.bannerView.frame = CGRectMake(0, 0, self.view.frame.size.width, self.bannerView.frame.size.height);
     [self.view addSubview:self.bannerView];
     [self.bannerView loadRequest:[GADRequest request]];
-    
-    self.upArrowButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self.upArrowButton setImage:[UIImage imageNamed:@"UpArrow.png"] forState:UIControlStateNormal];
-    self.upArrowButton.frame = CGRectMake(245, 70, self.upArrowButton.imageView.image.size.width, self.upArrowButton.imageView.image.size.height);
-    [self.upArrowButton addTarget:self action:@selector(touchUp) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:self.upArrowButton];
-
-    self.downArrowButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self.downArrowButton setImage:[UIImage imageNamed:@"DownArrow.png"] forState:UIControlStateNormal];
-    self.downArrowButton.frame = CGRectMake(245, 145, self.downArrowButton.imageView.image.size.width, self.downArrowButton.imageView.image.size.height);
-     [self.downArrowButton addTarget:self action:@selector(touchDown) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:self.downArrowButton];
-    
-    self.timeLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, 55, 200, 130)];
-    self.timeLabel.backgroundColor = [UIColor clearColor];
-    self.timeLabel.text = [NSString stringWithFormat:@"%d s", self.seconds];
-    self.timeLabel.textAlignment = NSTextAlignmentCenter;
-    self.timeLabel.font = [UIFont fontWithName:@"Helvetica" size:90.0f];
-    self.timeLabel.textColor = [UIColor whiteColor];
-    [self.view addSubview:self.timeLabel];
+	
     
     /*
     self.intensity = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"Intensity.png"]];
@@ -95,23 +76,17 @@
     [self.view addSubview:self.intensity];
      */
 
-    self.slider = [[UISlider alloc] initWithFrame:CGRectMake(20, 205, 280, 20)];
-    self.slider.minimumValue = 1;
-    self.slider.maximumValue = 5;
-    [self.slider setMaximumValueImage:[UIImage imageNamed:@"FireIcon.png"]];
-    [self.slider setMinimumValueImage:[UIImage imageNamed:@"SmallCloud"]];
-    [self.slider addTarget:self action:@selector(sliderValueChanged:) forControlEvents:UIControlEventValueChanged];
-    [self.slider setValue:3.0];
-    [self.slider setMinimumTrackTintColor:[UIColor whiteColor]];
-    [self.slider setMaximumTrackTintColor:[UIColor whiteColor]];
-
-    [self.view addSubview:self.slider];
     
     self.start = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.start setImage:[UIImage imageNamed:@"Start.png"] forState:UIControlStateNormal];
     self.start.frame = CGRectMake(0, 0, self.start.imageView.image.size.width, self.start.imageView.image.size.height);
     self.start.center = CGPointMake(self.view.center.x + 10, 354);
     [self.start addTarget:self action:@selector(startTimer) forControlEvents:UIControlEventTouchUpInside];
+	if (IDIOM == IPAD) {
+		[self.start setImage:[UIImage imageNamed:@"Startipad.png"] forState:UIControlStateNormal];
+		self.start.frame = CGRectMake(0, 0, self.start.imageView.image.size.width, self.start.imageView.image.size.height);
+		self.start.center = CGPointMake(self.view.center.x + 10, self.view.center.y + 230);
+	}
     [self.view addSubview:self.start];
     
     self.stop = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -119,6 +94,11 @@
     self.stop.frame = CGRectMake(0, 0, self.start.imageView.image.size.width, self.start.imageView.image.size.height);
     self.stop.center = CGPointMake(self.view.center.x+3, 356);
     [self.stop addTarget:self action:@selector(stopTimer) forControlEvents:UIControlEventTouchUpInside];
+	if (IDIOM == IPAD) {
+		[self.stop setImage:[UIImage imageNamed:@"Stopipad"] forState:UIControlStateNormal];
+		self.stop.frame = CGRectMake(0, 0, self.stop.imageView.image.size.width, self.stop.imageView.image.size.height);
+		self.stop.center = CGPointMake(self.view.center.x + 10, self.view.center.y + 230);
+	}
     self.stop.hidden = YES;
     [self.view addSubview:self.stop];
     
@@ -128,7 +108,65 @@
     self.intensityLabel.backgroundColor = [UIColor clearColor];
     self.intensityLabel.textColor = [UIColor whiteColor];
     self.intensityLabel.font = [UIFont fontWithName:@"Helvetica" size:35.0f];
+	if (IDIOM == IPAD) {
+		self.intensityLabel.font = [UIFont fontWithName:@"Helvetica" size:70.0f];
+		[self.intensityLabel sizeToFit];
+		self.intensityLabel.center = CGPointMake(self.view.center.x, self.view.center.y + 50);
+		
+	}
     [self.view addSubview:self.intensityLabel];
+	
+	self.slider = [[UISlider alloc] initWithFrame:CGRectMake(20, 205, 280, 20)];
+	self.slider.minimumValue = 1;
+	self.slider.maximumValue = 5;
+	[self.slider setMaximumValueImage:[UIImage imageNamed:@"FireIcon.png"]];
+	[self.slider setMinimumValueImage:[UIImage imageNamed:@"SmallCloud"]];
+	[self.slider addTarget:self action:@selector(sliderValueChanged:) forControlEvents:UIControlEventValueChanged];
+	[self.slider setValue:3.0];
+	[self.slider setMinimumTrackTintColor:[UIColor whiteColor]];
+	[self.slider setMaximumTrackTintColor:[UIColor whiteColor]];
+	if (IDIOM == IPAD) {
+		self.slider.frame = CGRectMake(20, self.intensityLabel.frame.origin.y - 90, self.view.frame.size.width - 40, 20);
+		
+	}
+	[self.view addSubview:self.slider];
+	
+
+	
+	self.timeLabel = [[UILabel alloc] initWithFrame:CGRectMake(20, 55, 200, 130)];
+	self.timeLabel.backgroundColor = [UIColor clearColor];
+	self.timeLabel.text = [NSString stringWithFormat:@"%d s", self.seconds];
+	self.timeLabel.textAlignment = NSTextAlignmentCenter;
+	self.timeLabel.font = [UIFont fontWithName:@"Helvetica" size:90.0f];
+	self.timeLabel.textColor = [UIColor whiteColor];
+	if (IDIOM == IPAD) {
+		self.timeLabel.font = [UIFont fontWithName:@"Helvetica" size:120.0f];
+		self.timeLabel.frame = CGRectMake(0, self.slider.frame.origin.y - 210, 300, 300);
+		[self.timeLabel sizeToFit];
+		self.timeLabel.center = CGPointMake(self.view.center.x - 60, self.timeLabel.center.y);
+		
+	}
+	[self.view addSubview:self.timeLabel];
+	
+	self.upArrowButton = [UIButton buttonWithType:UIButtonTypeCustom];
+	[self.upArrowButton setImage:[UIImage imageNamed:@"UpArrow.png"] forState:UIControlStateNormal];
+	self.upArrowButton.frame = CGRectMake(245, 70, self.upArrowButton.imageView.image.size.width, self.upArrowButton.imageView.image.size.height);
+	[self.upArrowButton addTarget:self action:@selector(touchUp) forControlEvents:UIControlEventTouchUpInside];
+	if (IDIOM == IPAD) {
+		self.upArrowButton.frame = CGRectMake(self.timeLabel.frame.origin.x + self.timeLabel.frame.size.width + 50, self.timeLabel.frame.origin.y, self.upArrowButton.imageView.image.size.width, self.upArrowButton.imageView.image.size.height);
+		
+	}
+	[self.view addSubview:self.upArrowButton];
+	
+	self.downArrowButton = [UIButton buttonWithType:UIButtonTypeCustom];
+	[self.downArrowButton setImage:[UIImage imageNamed:@"DownArrow.png"] forState:UIControlStateNormal];
+	self.downArrowButton.frame = CGRectMake(245, 145, self.downArrowButton.imageView.image.size.width, self.downArrowButton.imageView.image.size.height);
+	[self.downArrowButton addTarget:self action:@selector(touchDown) forControlEvents:UIControlEventTouchUpInside];
+	if (IDIOM == IPAD) {
+		self.downArrowButton.frame = CGRectMake(self.timeLabel.frame.origin.x + self.timeLabel.frame.size.width + 50, self.timeLabel.frame.origin.y + self.timeLabel.frame.size.height - 30, self.downArrowButton.imageView.image.size.width, self.downArrowButton.imageView.image.size.height);
+		
+	}
+	[self.view addSubview:self.downArrowButton];
     
     /*
     self.dontSleep = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 125, 40)];

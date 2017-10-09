@@ -10,6 +10,9 @@
 #import <GoogleMobileAds/GoogleMobileAds.h>
 #import <AVFoundation/AVFoundation.h>
 
+#define IDIOM    UI_USER_INTERFACE_IDIOM()
+#define IPAD     UIUserInterfaceIdiomPad
+
 @interface FFFUnlockedFartsViewController : UIViewController <GADRewardBasedVideoAdDelegate, GADBannerViewDelegate>
 
 @property (nonatomic,strong) GADBannerView *bannerView;

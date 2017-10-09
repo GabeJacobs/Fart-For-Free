@@ -8,6 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
+
+#define IDIOM    UI_USER_INTERFACE_IDIOM()
+#define IPAD     UIUserInterfaceIdiomPad
+
+
 @interface FFFTabBarViewController : UITabBarController
 
 @end

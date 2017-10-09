@@ -74,6 +74,10 @@
 	self.picker.dataSource = self;
 	self.picker.showsSelectionIndicator = YES;
 	[self.picker selectRow:4 inComponent:0 animated:NO];
+	if (IDIOM == IPAD) {
+		self.picker.frame = CGRectMake(0, 200, self.view.frame.size.width, self.picker.frame.size.height + 60);
+
+	}
 	[self.view addSubview:self.picker];
 
 	self.messageButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -84,6 +88,10 @@
 		self.messageButton.frame = CGRectMake(30, self.picker.frame.size.height + self.picker.frame.origin.y - 20, self.view.frame.size.width - 60, 110);
 	}
 	[self.messageButton addTarget:self action:@selector(composeMessage) forControlEvents:UIControlEventTouchUpInside];
+	if (IDIOM == IPAD) {
+		self.messageButton.frame = CGRectMake(30, self.picker.frame.size.height + self.picker.frame.origin.y +20, self.view.frame.size.width - 60, 300);
+
+	}
 	[self.view addSubview:self.messageButton];
 
 }
