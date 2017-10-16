@@ -8,6 +8,11 @@
 
 #import "FFFUnlockedFartsViewController.h"
 
+static NSString * const kReplaceWithYourAdID = @"fart.premium.page";
+
+///Used to track whether the in-app purchases failed alert has been shown
+static NSString * const kIAPFailAlertShown = @"IAPFailAlertShown";
+
 @interface FFFUnlockedFartsViewController () <UIAlertViewDelegate>
 
 @end
@@ -16,6 +21,10 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+	
+	self.iapManager = [[DNSInAppPurchaseManager alloc] init];
+	self.iapManager.delegate = self;
+	[self setupStore];
 	
 	self.background = [[UIImageView alloc] initWithFrame:self.view.frame];
 	[self.background setImage:[UIImage imageNamed:@"Background.png"]];
@@ -104,9 +113,12 @@
 	[self.bannerView loadRequest:[GADRequest request]];
 	
 	
+	[MBProgressHUD showHUDAddedTo:self.view animated:YES];
 
     // Do any additional setup after loading the view.
 }
+
+
 - (void)setupButtons {
 
 	
@@ -422,29 +434,41 @@
 - (void)checkUnlock {
 	NSDate *date = [[NSUserDefaults standardUserDefaults] objectForKey:@"UNLOCK_DATE"];
 	if(date){
-		int seconds = -(int)[date timeIntervalSinceNow];
-		if(seconds > 600){
-			NSLog(@"10 Mins has passed");
-			self.isUnlocked = NO;
-		} else{
-			NSLog(@"Unlocked");
-			self.isUnlocked = YES;
-		}
+		self.isUnlocked = YES;
 	} else{
 		NSLog(@"Never got unlocked");
 		self.isUnlocked = NO;
 	}
+	
 }
-
 -(void)playFart:(UIButton*)sender{
 	[self checkUnlock];
 	if(!self.isUnlocked){
-		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Unlock Premium"
-														message:@"Watch an ad to unlock premium farts for 10 minutes!"
-													   delegate:self
-											  cancelButtonTitle:nil
-											  otherButtonTitles:@"No thanks", @"Okay!", nil];
-		[alert show];
+	
+		if (self.availableProducts) {
+			SKProduct *selectedProduct = self.availableProducts[0];
+			typeof(self) __weak weakSelf = self;
+			
+			//Delegate guarantees callback on main thread, fire on BG so as not to block UI.
+			NSOperationQueue *background = [[NSOperationQueue alloc] init];
+			[background addOperationWithBlock:^{
+				[weakSelf.iapManager purchaseProduct:selectedProduct];
+			}];
+		} else {
+			UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Purchases unavailable"
+															message:@"We apologize. Purchases are unavailable at the moment."
+														   delegate:self
+												  cancelButtonTitle:nil
+												  otherButtonTitles:@"Okay!", nil];
+			[alert show];
+			
+		}
+//		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Unlock Premium"
+//														message:@"Watch an ad to unlock premium farts for 10 minutes!"
+//													   delegate:self
+//											  cancelButtonTitle:nil
+//											  otherButtonTitles:@"No thanks", @"Okay!", nil];
+//		[alert show];
 	
 	} else {
 		UIButton *buttonClicked = (UIButton *)sender;
@@ -481,12 +505,7 @@
 - (void)rewardBasedVideoAdDidClose:(GADRewardBasedVideoAd *)rewardBasedVideoAd {
 	NSLog(@"Reward based video ad is closed.");
 	if(self.isUnlocked) {
-		UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Enjoy!"
-														message:@"Enjoy premium!"
-													   delegate:self
-											  cancelButtonTitle:nil
-											  otherButtonTitles:@"Thanks!", nil];
-		[alert show];
+	
 	}
 	[[GADRewardBasedVideoAd sharedInstance] loadRequest:[GADRequest request]
 										   withAdUnitID:@"ca-app-pub-3677742875636291/8790125677"];
@@ -513,4 +532,119 @@
 		
 	}
 }
+
+
+#pragma mark - In-App Purchase setup
+-(void)setupStore
+{
+	
+
+	
+	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+	if ([self.iapManager canMakePurchases]) {
+		//Reset whether the IAP fail alert has been shown
+		[defaults setBool:NO forKey:kIAPFailAlertShown];
+		[defaults synchronize];
+		
+		//Run on background thread - delegate forces callbacks on main thread.
+		NSOperationQueue *background = [[NSOperationQueue alloc] init];
+		__block DNSInAppPurchaseManager *blockManager = self.iapManager;
+		[background addOperationWithBlock:^{
+			//Gets your store items.
+			[blockManager loadStoreWithIdentifiers:[NSSet setWithObject:kReplaceWithYourAdID]];
+		}];
+	} else {
+		if (![defaults boolForKey:kIAPFailAlertShown]) {
+			//[MBProgressHUD hideHUDForView:self.view animated:YES];
+			//Warn the user
+			UIAlertView *disabled = [self.iapManager cantMakePurchasesAlert];
+			[disabled show];
+			
+			//Note that this alert has been shown.
+			[defaults setBool:YES forKey:kIAPFailAlertShown];
+			[defaults synchronize];
+		}
+		
+//		[self.testProductButton setTitle:NSLocalizedString(@"IAP Disabled On This Device", @"Error button title for IAP disabled") forState:UIControlStateNormal];
+	}
+}
+
+#pragma mark - Convenience
+-(void)showErrorAlertView:(NSString *)message
+{
+	[[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Error", @"Error")
+								message:message
+							   delegate:nil
+					  cancelButtonTitle:NSLocalizedString(@"OK", @"OK")
+					  otherButtonTitles:nil] show];
+}
+
+
+-(void)purchaseSucceeded
+{
+	NSDate *date = [NSDate date];
+	[[NSUserDefaults standardUserDefaults] setObject:date forKey:@"UNLOCK_DATE"]; //
+	
+	self.isUnlocked = YES;
+}
+
+#pragma mark - In App Purchase Manager Delegate
+-(void)productRetrievalFailed:(NSString *)errorMessage
+{
+	[MBProgressHUD hideHUDForView:self.view animated:YES];
+
+	[self showErrorAlertView:errorMessage];
+}
+
+-(void)productsRetrieved:(NSArray *)products
+{
+	[MBProgressHUD hideHUDForView:self.view animated:YES];
+
+	if (products) {
+		//Store your available products.
+		self.availableProducts = products;
+		
+		//Since we know there's only one product:
+		SKProduct *firstProduct = [products firstObject];
+
+	} else {
+		[self showErrorAlertView:@"No products retrieved from ITC!"];
+	}
+}
+
+-(void)purchaseFailed:(NSString *)errorMessage
+{
+	[self showErrorAlertView:errorMessage];
+	self.isUnlocked = NO;
+	
+}
+
+-(void)purchaseCancelled {
+	
+}
+
+-(void)purchaseSucceeded:(NSString *)productIdentifier
+{
+	if ([productIdentifier isEqualToString:kReplaceWithYourAdID]) {
+		[self purchaseSucceeded];
+	} //check other purchases with else-if statements here.
+}
+
+-(void)restorationSucceeded{
+	NSDate *date = [NSDate date];
+	[[NSUserDefaults standardUserDefaults] setObject:date forKey:@"UNLOCK_DATE"]; //
+	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Enjoy!"
+													message:@"Enjoy premium!"
+												   delegate:self
+										  cancelButtonTitle:nil
+										  otherButtonTitles:@"Thanks!", nil];
+	[alert show];
+}
+
+-(void)restorationFailedWithError:(NSString *)errorMessage
+{
+	[self showErrorAlertView:errorMessage];
+
+}
+
 @end

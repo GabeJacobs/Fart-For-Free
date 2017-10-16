@@ -9,11 +9,15 @@
 #import <UIKit/UIKit.h>
 #import <GoogleMobileAds/GoogleMobileAds.h>
 #import <AVFoundation/AVFoundation.h>
+#import <UIKit/UIKit.h>
+#import <StoreKit/StoreKit.h>
+#import "DNSInAppPurchaseManager.h"
+#import "MBProgressHUD.h"
 
 #define IDIOM    UI_USER_INTERFACE_IDIOM()
 #define IPAD     UIUserInterfaceIdiomPad
 
-@interface FFFUnlockedFartsViewController : UIViewController <GADRewardBasedVideoAdDelegate, GADBannerViewDelegate>
+@interface FFFUnlockedFartsViewController : UIViewController <GADRewardBasedVideoAdDelegate, GADBannerViewDelegate, SKProductsRequestDelegate, SKPaymentTransactionObserver, DNSInAppPurchaseManagerDelegate>
 
 @property (nonatomic,strong) GADBannerView *bannerView;
 @property (nonatomic,strong) UIImageView *background;
@@ -41,5 +45,9 @@
 @property (nonatomic,strong) UIButton *button20;
 @property (nonatomic, strong) AVAudioPlayer *player;
 @property (nonatomic) BOOL isUnlocked;
+@property (nonatomic, strong) SKProduct *validProduct;
+@property (nonatomic, strong) DNSInAppPurchaseManager *iapManager;
+@property (nonatomic, strong) NSArray *availableProducts;
+@property (nonatomic, strong) MBProgressHUD *hud;
 
 @end

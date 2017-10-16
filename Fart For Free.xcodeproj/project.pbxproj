@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0B4C574755B45F54A295C4B3 /* libPods-Fart For FreeTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5D298F881367667E66BDF05B /* libPods-Fart For FreeTests.a */; };
 		232C0AAE189AE83C008D4B81 /* iAd.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 232C0AAD189AE83C008D4B81 /* iAd.framework */; };
 		232C0AB0189AE840008D4B81 /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 232C0AAF189AE840008D4B81 /* AdSupport.framework */; };
 		232C0AB2189AECFA008D4B81 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 232C0AB1189AECFA008D4B81 /* AudioToolbox.framework */; };
@@ -36,7 +37,6 @@
 		232C0B4B189B4F9D008D4B81 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 232C0B4A189B4F9D008D4B81 /* AVFoundation.framework */; };
 		232C0B4D189B4FA6008D4B81 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 232C0B4C189B4FA6008D4B81 /* CoreTelephony.framework */; };
 		232C0B4F189B4FAB008D4B81 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 232C0B4E189B4FAB008D4B81 /* MessageUI.framework */; };
-		232C0B51189B4FAF008D4B81 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 232C0B50189B4FAF008D4B81 /* StoreKit.framework */; };
 		232C0B53189B4FB7008D4B81 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 232C0B52189B4FB7008D4B81 /* SystemConfiguration.framework */; };
 		232C0B55189BEE0D008D4B81 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 232C0B54189BEE0D008D4B81 /* Images.xcassets */; };
 		232C0B57189BF5E1008D4B81 /* Intensity1.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 232C0B56189BF5E1008D4B81 /* Intensity1.mp3 */; };
@@ -84,6 +84,10 @@
 		23DCB4161F83DCD000EB2975 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23DCB4151F83DCD000EB2975 /* CFNetwork.framework */; };
 		23DCB4171F83DD5700EB2975 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23DCB4141F83DCC900EB2975 /* CFNetwork.framework */; };
 		23DCB4181F83DD5C00EB2975 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23DCB4141F83DCC900EB2975 /* CFNetwork.framework */; };
+		23FCA1371F943D6400604580 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23FCA1361F943D6400604580 /* StoreKit.framework */; };
+		23FCA13B1F94506300604580 /* DNSInAppPurchaseManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 23FCA13A1F94501400604580 /* DNSInAppPurchaseManager.m */; };
+		23FCA13F1F94552B00604580 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 23FCA13D1F94552B00604580 /* MBProgressHUD.m */; };
+		A5BDB9DBE1F15B7DD6AD14D6 /* libPods-Fart For Free.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 666BF9F6D1DFA194470E109B /* libPods-Fart For Free.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -128,7 +132,6 @@
 		232C0B4A189B4F9D008D4B81 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		232C0B4C189B4FA6008D4B81 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		232C0B4E189B4FAB008D4B81 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
-		232C0B50189B4FAF008D4B81 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		232C0B52189B4FB7008D4B81 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		232C0B54189BEE0D008D4B81 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		232C0B56189BF5E1008D4B81 /* Intensity1.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = Intensity1.mp3; sourceTree = "<group>"; };
@@ -186,7 +189,15 @@
 		23B6346B1F82FAAD0003C8A5 /* Dart20.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = Dart20.mp3; sourceTree = "<group>"; };
 		23DCB4141F83DCC900EB2975 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/CFNetwork.framework; sourceTree = DEVELOPER_DIR; };
 		23DCB4151F83DCD000EB2975 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
+		23FCA1361F943D6400604580 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
+		23FCA1391F94501400604580 /* DNSInAppPurchaseManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DNSInAppPurchaseManager.h; sourceTree = "<group>"; };
+		23FCA13A1F94501400604580 /* DNSInAppPurchaseManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DNSInAppPurchaseManager.m; sourceTree = "<group>"; };
+		23FCA13C1F94552A00604580 /* MBProgressHUD-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MBProgressHUD-Prefix.pch"; sourceTree = "<group>"; };
+		23FCA13D1F94552B00604580 /* MBProgressHUD.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MBProgressHUD.m; sourceTree = "<group>"; };
+		23FCA13E1F94552B00604580 /* MBProgressHUD.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MBProgressHUD.h; sourceTree = "<group>"; };
 		52BB2CB7210FE820A57775FC /* Pods-Fart For Free.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Fart For Free.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Fart For Free/Pods-Fart For Free.debug.xcconfig"; sourceTree = "<group>"; };
+		5D298F881367667E66BDF05B /* libPods-Fart For FreeTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Fart For FreeTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		666BF9F6D1DFA194470E109B /* libPods-Fart For Free.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Fart For Free.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7D940BDF106774A75E674951 /* Pods-Fart For FreeTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Fart For FreeTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-Fart For FreeTests/Pods-Fart For FreeTests.release.xcconfig"; sourceTree = "<group>"; };
 		E4516C8C4495417577727F83 /* Pods-Fart For Free.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Fart For Free.release.xcconfig"; path = "Pods/Target Support Files/Pods-Fart For Free/Pods-Fart For Free.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -197,9 +208,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				23DCB4161F83DCD000EB2975 /* CFNetwork.framework in Frameworks */,
+				23FCA1371F943D6400604580 /* StoreKit.framework in Frameworks */,
 				232C0B53189B4FB7008D4B81 /* SystemConfiguration.framework in Frameworks */,
 				23DCB4171F83DD5700EB2975 /* CFNetwork.framework in Frameworks */,
-				232C0B51189B4FAF008D4B81 /* StoreKit.framework in Frameworks */,
 				232C0B4F189B4FAB008D4B81 /* MessageUI.framework in Frameworks */,
 				232C0B4D189B4FA6008D4B81 /* CoreTelephony.framework in Frameworks */,
 				232F5A7D189AD18600B27178 /* CoreGraphics.framework in Frameworks */,
@@ -210,6 +221,7 @@
 				232C0AAE189AE83C008D4B81 /* iAd.framework in Frameworks */,
 				232F5A7F189AD18600B27178 /* UIKit.framework in Frameworks */,
 				232F5A7B189AD18600B27178 /* Foundation.framework in Frameworks */,
+				A5BDB9DBE1F15B7DD6AD14D6 /* libPods-Fart For Free.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -220,6 +232,7 @@
 				23DCB4181F83DD5C00EB2975 /* CFNetwork.framework in Frameworks */,
 				232F5A9C189AD18600B27178 /* UIKit.framework in Frameworks */,
 				232F5A9B189AD18600B27178 /* Foundation.framework in Frameworks */,
+				0B4C574755B45F54A295C4B3 /* libPods-Fart For FreeTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -311,12 +324,12 @@
 		232F5A79189AD18600B27178 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				23FCA1361F943D6400604580 /* StoreKit.framework */,
 				23DCB4141F83DCC900EB2975 /* CFNetwork.framework */,
 				23DCB4151F83DCD000EB2975 /* CFNetwork.framework */,
 				23696D8D1F81F3DC00FAF1A4 /* Twitter.framework */,
 				23696D871F81EF0300FAF1A4 /* GoogleMobileAds.framework */,
 				232C0B52189B4FB7008D4B81 /* SystemConfiguration.framework */,
-				232C0B50189B4FAF008D4B81 /* StoreKit.framework */,
 				232C0B4E189B4FAB008D4B81 /* MessageUI.framework */,
 				232C0B4C189B4FA6008D4B81 /* CoreTelephony.framework */,
 				232C0B4A189B4F9D008D4B81 /* AVFoundation.framework */,
@@ -326,6 +339,8 @@
 				232F5A7A189AD18600B27178 /* Foundation.framework */,
 				232F5A7C189AD18600B27178 /* CoreGraphics.framework */,
 				232F5A7E189AD18600B27178 /* UIKit.framework */,
+				666BF9F6D1DFA194470E109B /* libPods-Fart For Free.a */,
+				5D298F881367667E66BDF05B /* libPods-Fart For FreeTests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -355,6 +370,7 @@
 		232F5A81189AD18600B27178 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				23FCA1381F94501400604580 /* Library */,
 				232C0AC4189B1115008D4B81 /* Reachability.h */,
 				232C0AC5189B1115008D4B81 /* Reachability.m */,
 				232C0AB6189AF025008D4B81 /* SoundEffects */,
@@ -384,6 +400,18 @@
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
+		};
+		23FCA1381F94501400604580 /* Library */ = {
+			isa = PBXGroup;
+			children = (
+				23FCA13C1F94552A00604580 /* MBProgressHUD-Prefix.pch */,
+				23FCA13E1F94552B00604580 /* MBProgressHUD.h */,
+				23FCA13D1F94552B00604580 /* MBProgressHUD.m */,
+				23FCA1391F94501400604580 /* DNSInAppPurchaseManager.h */,
+				23FCA13A1F94501400604580 /* DNSInAppPurchaseManager.m */,
+			);
+			path = Library;
+			sourceTree = SOURCE_ROOT;
 		};
 		C6CDB8BFD65AD43671A51AB1 /* Pods */ = {
 			isa = PBXGroup;
@@ -452,6 +480,11 @@
 					232F5A76189AD18600B27178 = {
 						DevelopmentTeam = 3939LRJ2J8;
 						ProvisioningStyle = Manual;
+						SystemCapabilities = {
+							com.apple.InAppPurchase = {
+								enabled = 1;
+							};
+						};
 					};
 					232F5A97189AD18600B27178 = {
 						TestTargetID = 232F5A76189AD18600B27178;
@@ -643,10 +676,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				23FCA13B1F94506300604580 /* DNSInAppPurchaseManager.m in Sources */,
 				232F5A8B189AD18600B27178 /* AppDelegate.m in Sources */,
 				232F5AB1189AE69800B27178 /* FFFTabBarViewController.m in Sources */,
 				23696D911F81F4BD00FAF1A4 /* FFFUnlockedFartsViewController.m in Sources */,
 				232F5AB4189AE77700B27178 /* FFFSoundBoardViewController.m in Sources */,
+				23FCA13F1F94552B00604580 /* MBProgressHUD.m in Sources */,
 				232F5A87189AD18600B27178 /* main.m in Sources */,
 				232C0AC6189B1115008D4B81 /* Reachability.m in Sources */,
 				232F5AB7189AE78600B27178 /* FFFTimerViewController.m in Sources */,
@@ -795,6 +830,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Fart For Free/Fart For Free-Prefix.pch";
 				INFOPLIST_FILE = "Fart For Free/Fart For Free-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					/Users/gabejacobs/Desktop/Fart,
@@ -841,6 +877,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Fart For Free/Fart For Free-Prefix.pch";
 				INFOPLIST_FILE = "Fart For Free/Fart For Free-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					/Users/gabejacobs/Desktop/Fart,
