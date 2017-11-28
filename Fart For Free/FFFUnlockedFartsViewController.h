@@ -17,7 +17,7 @@
 #define IDIOM    UI_USER_INTERFACE_IDIOM()
 #define IPAD     UIUserInterfaceIdiomPad
 
-@interface FFFUnlockedFartsViewController : UIViewController <GADRewardBasedVideoAdDelegate, GADBannerViewDelegate, SKProductsRequestDelegate, SKPaymentTransactionObserver, DNSInAppPurchaseManagerDelegate>
+@interface FFFUnlockedFartsViewController : UIViewController <GADRewardBasedVideoAdDelegate, GADBannerViewDelegate, SKProductsRequestDelegate, SKPaymentTransactionObserver>
 
 @property (nonatomic,strong) GADBannerView *bannerView;
 @property (nonatomic,strong) UIImageView *background;
@@ -46,8 +46,11 @@
 @property (nonatomic, strong) AVAudioPlayer *player;
 @property (nonatomic) BOOL isUnlocked;
 @property (nonatomic, strong) SKProduct *validProduct;
+@property (nonatomic, strong) SKProductsRequest *productsRequest;
 @property (nonatomic, strong) DNSInAppPurchaseManager *iapManager;
-@property (nonatomic, strong) NSArray *availableProducts;
+@property (nonatomic, strong) NSArray *validProducts;
 @property (nonatomic, strong) MBProgressHUD *hud;
+
+
 
 @end
