@@ -57,10 +57,10 @@
 
 - (void)viewDidLoad
 {
+    self.view.backgroundColor = [UIColor redColor];
+    
     [super viewDidLoad];
 	
-	self.player = [[AVAudioPlayer alloc] init];
-
 	AVAudioSession *audioSession = [AVAudioSession sharedInstance];
 	NSError *error = nil;
 	BOOL result = NO;
@@ -636,7 +636,7 @@
 -(void)playFart:(UIButton*)sender{
     UIButton *buttonClicked = (UIButton *)sender;
     NSURL *audioPath = [[NSBundle mainBundle] URLForResource:[NSString stringWithFormat:@"Fart%ld", (long)buttonClicked.tag] withExtension:@"mp3"];
-	self.player = [[AVAudioPlayer alloc] initWithContentsOfURL:audioPath error:nil];
+    self.player = [[AVAudioPlayer alloc] initWithContentsOfURL:audioPath error:nil];
 	[self.player play];
 }
 

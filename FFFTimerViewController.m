@@ -46,9 +46,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
-	self.player = [[AVAudioPlayer alloc] init];
-
 	
     [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationNone];
 

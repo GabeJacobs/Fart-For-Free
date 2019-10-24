@@ -5,7 +5,8 @@ target 'Fart For Free' do
   # Uncomment the next line if you're using Swift or would like to use dynamic frameworks
   # use_frameworks!
   # Pods for Fart For Free
-        	
+
+  pod 'Google-Mobile-Ads-SDK'        	
   
   target 'Fart For FreeTests' do
     inherit! :search_paths

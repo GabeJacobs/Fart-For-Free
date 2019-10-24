@@ -27,7 +27,6 @@
 	
 	[GADRewardBasedVideoAd sharedInstance].delegate = self;
 	
-	self.player = [[AVAudioPlayer alloc] init];
 	
 	AVAudioSession *audioSession = [AVAudioSession sharedInstance];
 	NSError *error = nil;
@@ -99,18 +98,9 @@
 	[self setupButtons];
 
 	
-//	self.bannerView = [[GADBannerView alloc] initWithAdSize:kGADAdSizeBanner];
-//	self.bannerView.adUnitID = @"ca-app-pub-3677742875636291/8598865284";
-//	self.bannerView.rootViewController = self;
-//	//[self.view addSubview:self.bannerView];
-//	self.bannerView.delegate = self;
-//	self.bannerView.frame = CGRectMake(0, 0, self.view.frame.size.width, self.bannerView.frame.size.height);
-//	[self.bannerView loadRequest:[GADRequest request]];
-//
-	
-	[MBProgressHUD showHUDAddedTo:self.view animated:YES];
+	//[MBProgressHUD showHUDAddedTo:self.view animated:YES];
 
-    // Do any additional setup after loading the view.
+
 }
 
 
@@ -456,12 +446,15 @@
 	if(alertView.tag == 1){
 		if(buttonIndex == 0) {
 			[self purchase];
-		} else{
-			[MBProgressHUD showHUDAddedTo:self.view animated:YES];
+		} else if (buttonIndex == 1) {
+			//[MBProgressHUD showHUDAddedTo:self.view animated:YES];
+
 			[[SKPaymentQueue defaultQueue] addTransactionObserver:self];
 			[[SKPaymentQueue defaultQueue] restoreCompletedTransactions];
 
-		}
+        } else {
+            
+        }
 	}
 }
 
@@ -496,10 +489,12 @@
 		[[SKPaymentQueue defaultQueue] addTransactionObserver:self];
 		[[SKPaymentQueue defaultQueue] addPayment:payment];
 	} else {
-		UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:
-								  @"Purchases are disabled in your device" message:nil delegate:
-								  self cancelButtonTitle:@"Ok" otherButtonTitles: nil];
-		[alertView show];
+        dispatch_async(dispatch_get_main_queue(), ^{
+          UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:
+                                    @"Purchases are disabled in your device" message:nil delegate:
+                                    self cancelButtonTitle:@"Ok" otherButtonTitles: nil];
+          [alertView show];
+        });
 	}
 }
 - (void)purchase {
@@ -514,7 +509,9 @@ updatedTransactions:(NSArray *)transactions {
 	for (SKPaymentTransaction *transaction in transactions) {
 		switch (transaction.transactionState) {
 			case SKPaymentTransactionStatePurchasing:
-				[MBProgressHUD showHUDAddedTo:self.view animated:YES];
+				////[MBProgressHUD showHUDAddedTo:self.view animated:YES];
+
+
 				NSLog(@"Purchasing");
 				break;
 				
@@ -523,7 +520,7 @@ updatedTransactions:(NSArray *)transactions {
 					 isEqualToString:kTutorialPointProductID]) {
 					[[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"didPurchasePrem"]; //
 					self.isUnlocked = YES;
-					[MBProgressHUD hideHUDForView:self.view animated:YES];
+					[self hideHud];
 
 				}
 				[[SKPaymentQueue defaultQueue] finishTransaction:transaction];
@@ -531,13 +528,13 @@ updatedTransactions:(NSArray *)transactions {
 				
 			case SKPaymentTransactionStateRestored:
 				NSLog(@"Restored ");
-				[MBProgressHUD hideHUDForView:self.view animated:YES];
+				[self hideHud];
 				[[SKPaymentQueue defaultQueue] finishTransaction:transaction];
 				break;
 				
 			case SKPaymentTransactionStateFailed: {
 	
-				[MBProgressHUD hideHUDForView:self.view animated:YES];
+				[self hideHud];
 				[[SKPaymentQueue defaultQueue] finishTransaction:transaction];
 				break;
 			}
@@ -546,6 +543,7 @@ updatedTransactions:(NSArray *)transactions {
 		}
 	}
 }
+
 - (void)showNoRestore {
 	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"No purchases found"
 													message:@"Sorry, we didn't find any purchases with that ID"
@@ -565,11 +563,11 @@ updatedTransactions:(NSArray *)transactions {
 			[self purchaseSucceeded];
 		} else{
 			[self showNoRestore];
-			[MBProgressHUD hideHUDForView:self.view animated:YES];
+			[self hideHud];
 		}
 	} else{
 		[self showNoRestore];
-		[MBProgressHUD hideHUDForView:self.view animated:YES];
+		[self hideHud];
 	}
 }
 
@@ -586,10 +584,10 @@ updatedTransactions:(NSArray *)transactions {
 			
 			[self checkUnlock];
 			if (self.isUnlocked){
-				[MBProgressHUD hideHUDForView:self.view animated:YES];
+				[self hideHud];
 			} else{
 				[self showPremiumAlert];
-				[MBProgressHUD hideHUDForView:self.view animated:YES];
+				[self hideHud];
 			}
 	} else {
 		UIAlertView *tmp = [[UIAlertView alloc]
@@ -601,7 +599,7 @@ updatedTransactions:(NSArray *)transactions {
 		[tmp show];
 	}
 	
-		[MBProgressHUD hideHUDForView:self.view animated:YES];
+		[self hideHud];
 	}
 }
 -(void)purchaseSucceeded {
@@ -613,24 +611,33 @@ updatedTransactions:(NSArray *)transactions {
 										  cancelButtonTitle:nil
 										  otherButtonTitles:@"Thanks!", nil];
 	[alert show];
-	[MBProgressHUD hideHUDForView:self.view animated:YES];
+	[self hideHud];
 }
 
 - (void)showPremiumAlert {
-	
-	UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Welcome To Premium"
-													message:@"Enjoy 20 more farts for just $.99"
-												   delegate:self
-										  cancelButtonTitle:nil
-										  otherButtonTitles:@"Get Premium",@"Restore Purchases", nil];
-	
-	alert.tag = 1;
-	alert.delegate = self;
-	[alert show];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Welcome To Premium"
+                                                        message:@"Enjoy 20 more farts for just $.99"
+                                                       delegate:self
+                                              cancelButtonTitle:nil
+                                              otherButtonTitles:@"Get Premium",@"Restore Purchases", @"Cancel", nil];
+        
+        alert.tag = 1;
+        alert.delegate = self;
+        [alert show];
+        
+    });
+
 	
 }
 
 - (BOOL)paymentQueue:(SKPaymentQueue *)queue shouldAddStorePayment:(SKPayment *)payment forProduct:(SKProduct *)product {
 	return YES;
+}
+
+- (void)hideHud {
+    dispatch_async(dispatch_get_main_queue(), ^{
+      [MBProgressHUD hideHUDForView:self.view animated:YES];
+    });
 }
 @end
