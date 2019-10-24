@@ -84,9 +84,10 @@
     
     
     self.background = [[UIImageView alloc] initWithFrame:CGRectMake(-1, -1, [[UIScreen mainScreen] bounds].size.width+2, ([[UIScreen mainScreen] bounds].size.height+2))];
-    [self.background setImage:[UIImage imageNamed:@"Background.png"]];
+    //[self.background setImage:[UIImage imageNamed:@"Background.png"]];
     [self.view addSubview:self.background];
-	
+    self.view.backgroundColor = [UIColor redColor];
+    
     UIImage* fartImage = [UIImage imageNamed:@"Fart.png"];
 	if (IDIOM == IPAD) {
 		fartImage = [UIImage imageNamed:@"FARTipad"];
@@ -109,7 +110,7 @@
     self.bannerView.rootViewController = self;
     self.bannerView.alpha = 0.0;
 	self.bannerView.frame = CGRectMake(0, 0, self.view.frame.size.width, self.bannerView.frame.size.height);
-    [self.view addSubview:self.bannerView];
+   // [self.view addSubview:self.bannerView];
     self.bannerView.delegate = self;
     [self.bannerView loadRequest:[GADRequest request]];
    

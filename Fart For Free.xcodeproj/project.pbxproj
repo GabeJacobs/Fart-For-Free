@@ -848,7 +848,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Fart For Free/Fart For Free-Prefix.pch";
 				INFOPLIST_FILE = "Fart For Free/Fart For Free-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					/Users/gabejacobs/Desktop/Fart,
@@ -897,7 +897,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Fart For Free/Fart For Free-Prefix.pch";
 				INFOPLIST_FILE = "Fart For Free/Fart For Free-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					/Users/gabejacobs/Desktop/Fart,

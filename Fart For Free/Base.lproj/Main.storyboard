@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="d0R-wU-vYi">
-    <device id="retina4_7" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15400" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="d0R-wU-vYi">
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
-        <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15404"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -13,7 +10,7 @@
         <!--Soundboard-->
         <scene sceneID="xuM-3t-Im0">
             <objects>
-                <viewController wantsFullScreenLayout="YES" id="pce-hD-Ryg" customClass="FFFSoundBoardViewController" sceneMemberID="viewController">
+                <viewController wantsFullScreenLayout="YES" modalPresentationStyle="fullScreen" id="pce-hD-Ryg" customClass="FFFSoundBoardViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="UxP-zh-oUs">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -21,6 +18,7 @@
                         <viewLayoutGuide key="safeArea" id="Ebg-Ju-LeX"/>
                     </view>
                     <tabBarItem key="tabBarItem" title="Soundboard" image="Cloud" id="Lb4-yh-0OU"/>
+                    <value key="contentSizeForViewInPopover" type="size" width="375" height="667"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="44r-EM-l2X" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
