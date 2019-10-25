@@ -29,7 +29,7 @@
             <objects>
                 <tabBarController autoresizesArchivedViewToFullSize="NO" definesPresentationContext="YES" id="d0R-wU-vYi" customClass="FFFTabBarViewController" sceneMemberID="viewController">
                     <nil key="simulatedBottomBarMetrics"/>
-                    <tabBar key="tabBar" contentMode="scaleToFill" backgroundImage="TabBar" id="ReK-oH-WPi">
+                    <tabBar key="tabBar" opaque="NO" contentMode="scaleToFill" backgroundImage="TabBar" id="ReK-oH-WPi">
                         <rect key="frame" x="129" y="330" width="163" height="49"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                         <viewLayoutGuide key="safeArea" id="Hvt-1d-pH1"/>
